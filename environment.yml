@@ -1,0 +1,29 @@
+name: autogluon # 생성할 Conda 환경의 이름입니다. 원하는 대로 변경 가능합니다.
+channels:
+  - pytorch
+  - nvidia   #<-- CUDA Toolkit을 위해 추가
+  - pyg      #<-- PyTorch Geometric을 위해 추가
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+
+  # PyTorch와 CUDA 11.8 설정
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=11.8 #<- 이 패키지를 찾기 위해 nvidia 채널이 필요
+
+  # 핵심 라이브러리 (pyg 채널에서 설치)
+  - pyg #<-- pytorch-geometric 대신 pyg 사용
+
+  # 나머지 라이브러리 (conda-forge 등에서 설치)
+  - autogluon
+  - rdkit
+  - pandas
+  - numpy
+  - scikit-learn
+  - matplotlib
+  - scipy
+  - xgboost

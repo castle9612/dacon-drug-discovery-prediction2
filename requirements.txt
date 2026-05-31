@@ -1,0 +1,15 @@
+pandas
+numpy
+scikit-learn
+xgboost
+lightgbm
+catboost
+rdkit
+torch
+torch-geometric
+transformers
+autogluon
+pyyaml
+tqdm
+matplotlib
+jupyter
