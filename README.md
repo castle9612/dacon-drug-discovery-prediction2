@@ -1,10 +1,10 @@
 # Drug Discovery Prediction
 
-Molecular activity prediction project for estimating drug-response values from SMILES strings and molecular descriptors. The repository is prepared as a public, portfolio-ready version of the original experiment workspace: private datasets, generated submissions, logs, and trained model artifacts are excluded, while reproducible experiment code, cleaned notebooks, and result figures are retained.
+Molecular activity prediction project for estimating drug-response values from SMILES strings and molecular descriptors. The project compares classical cheminformatics features, pretrained molecular language models, graph neural networks, and tabular ensemble methods for drug discovery regression tasks.
 
 ## Project Overview
 
-This project explores how to improve molecular prediction performance by combining classical cheminformatics features with modern representation learning. The original task used molecular SMILES strings and target values such as `pIC50` or inhibition rate. The modeling work compares fingerprint-based XGBoost baselines, ChemBERTa/RoBERTa-style transfer learning, graph neural network experiments, MolCLR representation learning, and AutoGluon-style tabular ensembling.
+This project explores how to improve molecular prediction performance by combining classical cheminformatics features with modern representation learning. The task uses molecular SMILES strings and target values such as `pIC50` or inhibition rate. The modeling work compares fingerprint-based XGBoost baselines, ChemBERTa/RoBERTa-style transfer learning, graph neural network experiments, MolCLR representation learning, and AutoGluon-style tabular ensembling.
 
 The main goal was not only to train a single model, but to understand which representation strategy produced stable predictions and how smoothing or feature engineering could reduce errors in sparse target regions.
 
@@ -19,29 +19,13 @@ The main goal was not only to train a single model, but to understand which repr
 - MolCLR for molecular contrastive representation learning
 - Matplotlib and Seaborn for result visualization
 
-## Source Workspace Audit
-
-The public repository was rechecked against the original local drug-prediction workspace.
-
-| Original item | Public repository item | Decision |
-| --- | --- | --- |
-| `xgboost_0722.py` | `src/xgboost_baseline.py` | Kept as a sanitized script using `data/` and `outputs/` paths. |
-| `submission.py` | `src/prediction_pipeline.py` | Kept as a sanitized inference/submission pipeline. |
-| `fine_tuning.ipynb` | `notebooks/legacy_transformer_finetuning.ipynb` | Kept with notebook outputs cleared. |
-| `roberta_0818.ipynb` | Not copied | Excluded because the source file is 0 bytes. |
-| `Untitled.ipynb` | Not copied | Excluded because the notebook has no cells. |
-| `xgboost_0722.zip`, `submission.zip` | Not copied | Excluded because they only duplicate the Python scripts. |
-| `open/*.csv`, `xgboost_*.csv`, logs, local outputs | Not copied | Excluded as private data, generated submissions, logs, or reproducibility artifacts. |
-
-More details are documented in `docs/SOURCE_AUDIT.md`.
-
 ## Modeling Goals
 
 - Convert SMILES strings into machine-learning-ready molecular representations.
 - Compare fingerprint/descriptor models against neural molecular encoders.
 - Improve validation stability through cross-validation and ensemble-style modeling.
 - Investigate target imbalance and sparse-label regions with LDS/FDS smoothing.
-- Keep the public repository lightweight by excluding raw datasets, trained weights, and submission files.
+- Keep the repository lightweight by excluding raw datasets, trained weights, and generated submission files.
 
 ## Performance Improvement Process
 
@@ -53,21 +37,21 @@ Key idea: start with a strong, interpretable cheminformatics baseline instead of
 
 ### 2. Similarity and autoencoder features
 
-The original `xgboost_0722.py` experiment generated Morgan fingerprints, built a molecular similarity matrix, compressed the representation with an autoencoder, and searched XGBoost hyperparameters with K-fold validation. This was intended to reduce high-dimensional fingerprint noise while preserving molecular similarity information.
+The XGBoost baseline generates Morgan fingerprints, builds a molecular similarity matrix, compresses the representation with an autoencoder, and searches XGBoost hyperparameters with K-fold validation. This is intended to reduce high-dimensional fingerprint noise while preserving molecular similarity information.
 
-Public script: `src/xgboost_baseline.py`
+Implementation: `src/xgboost_baseline.py`
 
 ### 3. Larger fingerprint inference pipeline
 
-The `submission.py` workflow used a larger Morgan fingerprint size and a fixed XGBoost configuration to generate test predictions. The public version writes generated files under `outputs/`, which is ignored by Git.
+The inference workflow uses a larger Morgan fingerprint size and a fixed XGBoost configuration to generate test predictions. Generated files are written under `outputs/`, which is ignored by Git.
 
-Public script: `src/prediction_pipeline.py`
+Implementation: `src/prediction_pipeline.py`
 
 ### 4. Transformer-based SMILES representation
 
 The fine-tuning notebook used a pretrained SMILES tokenizer/model (`seyonec/PubChem10M_SMILES_BPE_450k`) and attached a regression head for `pIC50` prediction. Additional ChemBERTa experiments explored pretrained chemical language models and combined their embeddings with RDKit descriptors.
 
-Public notebooks:
+Notebooks:
 
 - `notebooks/legacy_transformer_finetuning.ipynb`
 - `notebooks/chemberta_finetuning.ipynb`
@@ -76,7 +60,7 @@ Public notebooks:
 
 Graph neural network and MolCLR experiments converted molecules into graph structures, extracted graph-level embeddings, and tested whether graph representations improved prediction quality beyond tabular fingerprints.
 
-Public notebooks and code:
+Notebooks and code:
 
 - `notebooks/gnn_regression.ipynb`
 - `notebooks/molclr_fds_experiment.ipynb`
@@ -139,7 +123,6 @@ Feature importance analysis was used to interpret which engineered molecular des
 |   `-- model_performance_transfer.png
 |-- docs/
 |   |-- DATA.md
-|   |-- SOURCE_AUDIT.md
 |   `-- THIRD_PARTY_NOTICES.md
 |-- notebooks/
 |   |-- chemberta_finetuning.ipynb
@@ -243,7 +226,7 @@ python finetune.py
 - LDS/FDS visualization for distribution smoothing analysis
 - Feature-importance figure for model interpretation
 - Cleaned notebooks that preserve the main experiment flow without private outputs
-- Sanitized scripts that write generated files to ignored `outputs/` paths
+- Scripts that write generated files to ignored `outputs/` paths
 
 ## Conclusion
 
@@ -257,7 +240,7 @@ For a production-grade follow-up, the next improvements would be to add a unifie
 - RDKit fingerprints and descriptors provide a reliable baseline that should be measured before adding complex neural models.
 - SMILES transformers can be powerful, but fine-tuning stability depends on dataset size, target scaling, and validation design.
 - LDS/FDS-style analysis is useful when the target distribution is imbalanced or sparse.
-- Public ML repositories should separate reproducible code from private data, generated submissions, and trained artifacts.
+- ML repositories should separate reproducible code from private data, generated submissions, and trained artifacts.
 
 ## Third-Party Notice
 
